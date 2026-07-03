@@ -1,0 +1,39 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy requirements
+COPY ba_requirements.txt requirements.txt
+RUN pip install --no-cache-dir --default-timeout=300 --retries 10 \
+    fastapi==0.138.2 uvicorn==0.49.0 pandas==2.3.3 \
+    numpy==2.4.6 scikit-learn==1.9.0 psycopg2-binary \
+    pydantic==2.13.4 mlflow==3.14.0 \
+    vaderSentiment textblob
+
+RUN pip install --no-cache-dir --default-timeout=600 --retries 10 \
+    xgboost==3.2.0
+
+# Download TextBlob corpora
+RUN python3 -m textblob.download_corpora
+
+# Copy application
+COPY src/api/ba_app.py .
+COPY src/ml/ba_train_model.py .
+COPY src/nlp/ba_text_cleaner.py .
+COPY mlflow.db .
+COPY models ./models
+COPY mlruns ./mlruns
+
+RUN mkdir -p logs
+
+EXPOSE 8003
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python -c "import urllib.request; urllib.request.urlopen('http://localhost:8003/health')" || exit 1
+
+CMD ["uvicorn", "ba_app:app", "--host", "0.0.0.0", "--port", "8003"]

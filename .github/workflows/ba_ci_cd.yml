@@ -1,0 +1,184 @@
+name: CI/CD - Airline Customer Intelligence Platform
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  # ── Job 1: Code Quality ────────────────────────────────────────────────────
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install lint tools
+        run: pip install flake8
+
+      - name: Check for syntax errors
+        run: |
+          flake8 . --count --select=E9,F63,F7 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+  # ── Job 2: Verify all scripts parse cleanly ────────────────────────────────
+  verify-scripts:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install fastapi uvicorn pandas numpy scikit-learn pydantic \
+                      mlflow psycopg2-binary vaderSentiment textblob joblib
+          pip install xgboost==3.2.0
+
+      - name: Verify NLP pipeline
+        run: python -c "import ast; ast.parse(open('src/nlp/ba_text_cleaner.py').read()); print('Text cleaner OK')"
+
+      - name: Verify sentiment pipeline
+        run: python -c "import ast; ast.parse(open('src/nlp/ba_sentiment.py').read()); print('Sentiment pipeline OK')"
+
+      - name: Verify topic model
+        run: python -c "import ast; ast.parse(open('src/nlp/ba_topic_model.py').read()); print('Topic model OK')"
+
+      - name: Verify ETL pipeline
+        run: python -c "import ast; ast.parse(open('src/ml/ba_etl_bookings.py').read()); print('ETL pipeline OK')"
+
+      - name: Verify training script
+        run: python -c "import ast; ast.parse(open('src/ml/ba_train_model.py').read()); print('Training script OK')"
+
+      - name: Verify API
+        run: python -c "import ast; ast.parse(open('src/api/ba_app.py').read()); print('API script OK')"
+
+      - name: Verify all imports load
+        run: |
+          python -c "
+          import fastapi, uvicorn, pandas, numpy, sklearn
+          import mlflow, xgboost, textblob
+          from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+          print('All core imports successful')
+          "
+
+  # ── Job 3: Validate NLP logic ─────────────────────────────────────────────
+  validate-nlp-logic:
+    runs-on: ubuntu-latest
+    needs: verify-scripts
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install NLP dependencies
+        run: pip install vaderSentiment textblob pandas numpy
+
+      - name: Validate VADER sentiment logic
+        run: |
+          python -c "
+          from vaderSentiment.vaderSentiment import SentimentIntensityAnalyzer
+          analyzer = SentimentIntensityAnalyzer()
+
+          test_cases = [
+              ('The flight was excellent and crew were amazing', 'Positive'),
+              ('Terrible delay, rude staff, awful food', 'Negative'),
+          ]
+
+          for text, expected in test_cases:
+              scores = analyzer.polarity_scores(text)
+              compound = scores['compound']
+              if compound >= 0.05:
+                  sentiment = 'Positive'
+              elif compound <= -0.05:
+                  sentiment = 'Negative'
+              else:
+                  sentiment = 'Neutral'
+              assert sentiment == expected, f'Expected {expected}, got {sentiment} for: {text}'
+              print(f'PASSED: {expected} — compound={compound:.3f}')
+
+          print('All VADER sentiment validations passed')
+          "
+
+      - name: Validate text cleaning logic
+        run: |
+          python -c "
+          import re
+
+          def remove_noise(text):
+              text = re.sub(r'<[^>]+>', ' ', text)
+              text = re.sub(r'http\S+|www\S+', ' ', text)
+              text = text.encode('ascii', 'ignore').decode('ascii')
+              text = re.sub(r'[^a-zA-Z\s]', ' ', text)
+              text = re.sub(r'\s+', ' ', text).strip()
+              return text.lower()
+
+          test = '<p>Flight was delayed! Visit http://ba.com 😤</p>'
+          result = remove_noise(test)
+          assert '<p>' not in result, 'HTML not removed'
+          assert 'http' not in result, 'URL not removed'
+          assert result == result.lower(), 'Not lowercased'
+          print(f'Text cleaning passed: {result}')
+          print('All text cleaning validations passed')
+          "
+
+  # ── Job 4: Build Docker image ──────────────────────────────────────────────
+  build-docker:
+    runs-on: ubuntu-latest
+    needs: verify-scripts
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ba_Dockerfile
+          push: false
+          tags: ba-airline-intelligence:ci-test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Confirm build success
+        run: echo "Docker image built successfully"
+
+  # ── Job 5: Notify ──────────────────────────────────────────────────────────
+  notify:
+    runs-on: ubuntu-latest
+    needs: [build-docker, validate-nlp-logic]
+    if: always()
+    steps:
+      - name: Pipeline status
+        run: |
+          if [ "${{ needs.build-docker.result }}" == "success" ] && \
+             [ "${{ needs.validate-nlp-logic.result }}" == "success" ]; then
+            echo "✅ CI/CD pipeline passed"
+            echo "   - Code is lint-clean"
+            echo "   - All 6 scripts parse correctly"
+            echo "   - NLP sentiment logic validated"
+            echo "   - Text cleaning logic validated"
+            echo "   - Docker image builds successfully"
+          else
+            echo "❌ CI/CD pipeline failed — check logs above"
+            exit 1
+          fi

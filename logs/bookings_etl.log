@@ -1,0 +1,26 @@
+2026-07-03 01:05:32,991 [INFO] === BA Bookings ETL Pipeline Start ===
+2026-07-03 01:05:33,082 [INFO] ba_bookings table ready
+2026-07-03 01:05:33,083 [INFO] Loading booking data from data/raw/customer_booking.csv
+2026-07-03 01:05:33,319 [INFO] Loaded 50000 rows, 14 columns
+2026-07-03 01:05:33,320 [INFO] Transforming booking data
+2026-07-03 01:05:33,399 [INFO] Transform complete: 50000 rows
+2026-07-03 01:05:33,400 [INFO]   Booking completion rate: 15.0%
+2026-07-03 01:05:33,401 [INFO]   Class imbalance: 42522 incomplete vs 7478 complete
+2026-07-03 01:05:33,411 [INFO]   Booking window distribution:
+booking_window_category
+Medium Term    17015
+Long Term      15846
+Short Term     12326
+Last Minute     4813
+2026-07-03 01:05:33,412 [INFO] Loading booking data into PostgreSQL
+2026-07-03 01:05:40,580 [INFO] Loaded 50000 booking records into ba_bookings
+2026-07-03 01:05:41,359 [INFO] Saved: data/processed/bookings_clean.csv
+2026-07-03 01:05:41,486 [INFO] 
+Validation — 50000 total records
+2026-07-03 01:05:41,487 [INFO] 
+Completion rate by booking window:
+2026-07-03 01:05:41,501 [INFO]   Last Minute: 4813 bookings, 17.3% completion
+2026-07-03 01:05:41,502 [INFO]   Short Term: 12326 bookings, 16.1% completion
+2026-07-03 01:05:41,503 [INFO]   Medium Term: 17015 bookings, 14.6% completion
+2026-07-03 01:05:41,504 [INFO]   Long Term: 15846 bookings, 13.8% completion
+2026-07-03 01:05:41,505 [INFO] === ETL Complete — 50000 records loaded ===

@@ -1,0 +1,18 @@
+2026-07-02 23:39:13,422 [INFO] === BA Text Cleaning Pipeline Start ===
+2026-07-02 23:39:14,331 [INFO] Database tables ready
+2026-07-02 23:39:14,332 [INFO] Loading reviews from data/raw/reviews.csv
+2026-07-02 23:39:14,587 [INFO] Loaded 1920 reviews
+2026-07-02 23:39:14,587 [INFO] Starting text transformation pipeline
+2026-07-02 23:39:14,642 [INFO] Verified reviews: 1728 / 1920
+2026-07-02 23:39:14,830 [INFO] Lemmatizing reviews — this may take a minute...
+2026-07-02 23:40:17,924 [INFO] Removed 0 empty/too-short reviews
+2026-07-02 23:40:17,925 [INFO] Transform complete: 1920 reviews ready
+2026-07-02 23:40:17,926 [INFO] Loading cleaned reviews into PostgreSQL
+2026-07-02 23:40:18,644 [INFO] Loaded 1920 reviews into ba_reviews
+2026-07-02 23:40:18,967 [INFO] Saved: data/processed/reviews_clean.csv
+2026-07-02 23:40:18,967 [INFO] === Pipeline Complete — 1920 reviews loaded ===
+2026-07-02 23:40:18,968 [INFO] 
+Quick stats:
+2026-07-02 23:40:18,970 [INFO]   Verified reviews:   1728 (90.0%)
+2026-07-02 23:40:18,974 [INFO]   Avg word count:     209 words
+2026-07-02 23:40:18,975 [INFO]   Longest review:     351 words

@@ -1,0 +1,45 @@
+2026-07-02 23:52:11,022 [INFO] === BA Topic Modeling Pipeline Start ===
+2026-07-02 23:52:11,065 [INFO] Topic columns added to ba_reviews
+2026-07-02 23:52:11,253 [INFO] Loaded 1920 reviews for topic modeling
+2026-07-02 23:52:11,254 [INFO] Building LDA model with 6 topics...
+2026-07-02 23:52:11,497 [INFO] Vocabulary size: 1000
+2026-07-02 23:52:15,259 [INFO] LDA model trained
+2026-07-02 23:52:15,260 [INFO] 
+Top 12 words per topic:
+2026-07-02 23:52:15,275 [INFO]   Topic 0 — Flight Experience:
+2026-07-02 23:52:15,276 [INFO]     drink, passenger, seat, cabin, cabin crew, crew, service, inflight, selection, snack, meal, flight
+2026-07-02 23:52:15,277 [INFO]   Topic 1 — Customer Service:
+2026-07-02 23:52:15,277 [INFO]     long, toilet, price, food, cabin, use, loo, journey, short, offering, easyjet, hour
+2026-07-02 23:52:15,278 [INFO]   Topic 2 — Delays & Punctuality:
+2026-07-02 23:52:15,279 [INFO]     business, seat, class, business class, ask, british, product, fly, check, airport, note, poor
+2026-07-02 23:52:15,280 [INFO]   Topic 3 — Seat & Comfort:
+2026-07-02 23:52:15,280 [INFO]     seat, flight, long, british, try, return, row, haul, long haul, food, bad, fly
+2026-07-02 23:52:15,281 [INFO]   Topic 4 — Food & Catering:
+2026-07-02 23:52:15,282 [INFO]     airline, airways, british airways, british, flight, service, tell, experience, provide, london, try, cabin
+2026-07-02 23:52:15,282 [INFO]   Topic 5 — Baggage & Check-in:
+2026-07-02 23:52:15,283 [INFO]     good, return, way, plane, flight, economy, food, seat, serve, cabin, premium, take
+2026-07-02 23:52:15,444 [INFO] 
+Topic distribution across reviews:
+2026-07-02 23:52:15,449 [INFO]   Baggage & Check-in: 384 (20.0%)
+2026-07-02 23:52:15,449 [INFO]   Delays & Punctuality: 384 (20.0%)
+2026-07-02 23:52:15,450 [INFO]   Flight Experience: 384 (20.0%)
+2026-07-02 23:52:15,450 [INFO]   Customer Service: 384 (20.0%)
+2026-07-02 23:52:15,451 [INFO]   Food & Catering: 192 (10.0%)
+2026-07-02 23:52:15,451 [INFO]   Seat & Comfort: 192 (10.0%)
+2026-07-02 23:52:15,452 [INFO] 
+Sentiment breakdown by topic:
+2026-07-02 23:52:15,505 [INFO] 
+combined_sentiment    Negative  Positive
+topic_label                             
+Baggage & Check-in           0       384
+Customer Service           192       192
+Delays & Punctuality       384         0
+Flight Experience            0       384
+Food & Catering            192         0
+Seat & Comfort             192         0
+2026-07-02 23:52:15,507 [INFO] 
+Most complained-about topic: Delays & Punctuality
+2026-07-02 23:52:16,504 [INFO] Saved topic assignments for 1920 reviews
+2026-07-02 23:52:16,596 [INFO] Saved: data/processed/reviews_topics.csv
+2026-07-02 23:52:16,625 [INFO] Saved LDA model and vectorizer to models/
+2026-07-02 23:52:16,626 [INFO] === Topic Modeling Complete ===

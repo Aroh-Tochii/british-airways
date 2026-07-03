@@ -1,0 +1,56 @@
+2026-07-03 01:09:46,046 [INFO] === BA Booking Prediction Training Start ===
+2026-07-03 01:09:46,047 [INFO] Loading booking data from PostgreSQL
+2026-07-03 01:09:48,045 [INFO] Loaded 50000 rows
+2026-07-03 01:09:48,046 [INFO] Engineering features
+2026-07-03 01:09:49,522 [INFO] Features: ['num_passengers', 'sales_channel', 'trip_type', 'purchase_lead', 'length_of_stay', 'flight_hour', 'flight_day_num', 'wants_extra_baggage', 'wants_preferred_seat', 'wants_in_flight_meals', 'flight_duration', 'booking_window_category', 'route_popularity', 'is_weekend_booking', 'total_extras', 'duration_category', 'lead_x_extras', 'popularity_x_lead', 'extras_x_duration']
+2026-07-03 01:09:49,548 [INFO] Class distribution: {0: np.int64(42522), 1: np.int64(7478)}
+2026-07-03 01:09:49,551 [INFO] Class imbalance ratio: 5.69:1
+2026-07-03 01:10:17,484 [INFO] Train: 40000 | Test: 10000
+2026-07-03 01:10:34,640 [INFO] 
+==================================================
+2026-07-03 01:10:34,640 [INFO] XGBoost Booking Completion Model Performance
+2026-07-03 01:10:34,641 [INFO] ==================================================
+2026-07-03 01:10:34,641 [INFO]   accuracy: 0.5155
+2026-07-03 01:10:34,641 [INFO]   precision: 0.2164
+2026-07-03 01:10:34,642 [INFO]   recall: 0.8543
+2026-07-03 01:10:34,642 [INFO]   f1_score: 0.3454
+2026-07-03 01:10:34,643 [INFO]   roc_auc: 0.7364
+2026-07-03 01:10:34,643 [INFO]   decision_threshold: 0.35
+2026-07-03 01:10:34,643 [INFO] 
+  Confusion Matrix:
+2026-07-03 01:10:34,644 [INFO]   True Negatives  (Correct drop-offs):     3877
+2026-07-03 01:10:34,644 [INFO]   False Positives (Predicted complete, didn't): 4627
+2026-07-03 01:10:34,644 [INFO]   False Negatives (MISSED completers):     218 ← minimize
+2026-07-03 01:10:34,645 [INFO]   True Positives  (Correct completers):    1278
+2026-07-03 01:10:34,660 [INFO] 
+              precision    recall  f1-score   support
+
+    Drop-off       0.95      0.46      0.62      8504
+    Complete       0.22      0.85      0.35      1496
+
+    accuracy                           0.52     10000
+   macro avg       0.58      0.66      0.48     10000
+weighted avg       0.84      0.52      0.58     10000
+
+2026-07-03 01:11:16,131 [INFO] 
+Top 10 Feature Importance:
+2026-07-03 01:11:16,132 [INFO]   wants_extra_baggage: 0.1433
+2026-07-03 01:11:16,133 [INFO]   flight_duration: 0.1077
+2026-07-03 01:11:16,135 [INFO]   route_popularity: 0.0785
+2026-07-03 01:11:16,135 [INFO]   sales_channel: 0.0649
+2026-07-03 01:11:16,136 [INFO]   length_of_stay: 0.0621
+2026-07-03 01:11:16,137 [INFO]   duration_category: 0.0612
+2026-07-03 01:11:16,138 [INFO]   extras_x_duration: 0.0557
+2026-07-03 01:11:16,139 [INFO]   trip_type: 0.0508
+2026-07-03 01:11:16,140 [INFO]   total_extras: 0.0501
+2026-07-03 01:11:16,142 [INFO]   wants_preferred_seat: 0.0496
+2026-07-03 01:11:16,143 [INFO] 
+MLflow run ID: b510d8d9cff84b6dbb9cc15e2ba51dea
+2026-07-03 01:11:16,230 [INFO] 
+=== Training Complete ===
+2026-07-03 01:11:16,231 [INFO]   ROC-AUC:  0.7364
+2026-07-03 01:11:16,231 [INFO]   Recall:   0.8543
+2026-07-03 01:11:16,232 [INFO]   F1:       0.3454
+2026-07-03 01:11:16,233 [INFO]   Run ID:   b510d8d9cff84b6dbb9cc15e2ba51dea
+2026-07-03 01:11:16,234 [INFO] 
+View: mlflow ui --backend-store-uri sqlite:///mlflow.db

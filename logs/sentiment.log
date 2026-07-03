@@ -1,0 +1,15 @@
+2026-07-02 23:42:27,390 [INFO] === BA Sentiment Analysis Pipeline Start ===
+2026-07-02 23:42:27,446 [INFO] Sentiment columns added to ba_reviews
+2026-07-02 23:42:28,487 [INFO] Loaded 1920 reviews for sentiment analysis
+2026-07-02 23:42:28,488 [INFO] Running sentiment analysis...
+2026-07-02 23:43:04,644 [INFO] Sentiment analysis complete
+2026-07-02 23:43:04,644 [INFO] 
+Sentiment distribution (combined):
+2026-07-02 23:43:04,665 [INFO]   Positive: 960 (50.0%)
+2026-07-02 23:43:04,666 [INFO]   Negative: 960 (50.0%)
+2026-07-02 23:43:04,672 [INFO] 
+VADER vs TextBlob agreement rate: 40.0%
+2026-07-02 23:43:04,674 [INFO] Saving sentiment scores to PostgreSQL
+2026-07-02 23:43:11,888 [INFO] Saved sentiment scores for 1920 reviews
+2026-07-02 23:43:12,181 [INFO] Saved: data/processed/reviews_sentiment.csv
+2026-07-02 23:43:12,183 [INFO] === Sentiment Pipeline Complete ===

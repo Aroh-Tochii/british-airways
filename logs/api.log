@@ -1,0 +1,4 @@
+2026-07-03 12:12:20,124 [INFO] Loading booking model from MLflow...
+2026-07-03 12:12:33,954 [INFO] Booking model loaded — ROC-AUC: 0.7364
+2026-07-03 12:12:33,954 [INFO] Models loaded: ['booking']
+2026-07-03 12:26:35,340 [INFO] Sentiment analyzed: Negative (compound=-0.681)

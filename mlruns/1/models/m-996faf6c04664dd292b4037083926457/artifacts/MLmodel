@@ -1,0 +1,22 @@
+artifact_path: /mnt/c/Users/UserAdmin/Desktop/british airways/mlruns/1/models/m-996faf6c04664dd292b4037083926457/artifacts
+flavors:
+  python_function:
+    data: model.ubj
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.xgboost
+    python_version: 3.12.3
+  xgboost:
+    code: null
+    data: model.ubj
+    model_class: xgboost.sklearn.XGBClassifier
+    model_format: ubj
+    xgb_version: 3.3.0
+mlflow_version: 3.14.0
+model_id: m-996faf6c04664dd292b4037083926457
+model_size_bytes: 772075
+model_uuid: m-996faf6c04664dd292b4037083926457
+prompts: null
+run_id: b510d8d9cff84b6dbb9cc15e2ba51dea
+utc_time_created: '2026-07-03 08:10:35.434822'

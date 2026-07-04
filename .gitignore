@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+*.log
+mlruns/
+mlflow.db
+*.zip
+~$*
+.env
+logs/
+models/lda_model.pkl
+models/vectorizer.pkl
+data/processed/

@@ -25,9 +25,7 @@ RUN python3 -m textblob.download_corpora
 COPY src/api/ba_app.py .
 COPY src/ml/ba_train_model.py .
 COPY src/nlp/ba_text_cleaner.py .
-COPY mlflow.db .
 COPY models ./models
-COPY mlruns ./mlruns
 
 RUN mkdir -p logs
 
